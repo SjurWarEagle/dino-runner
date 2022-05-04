@@ -40,10 +40,6 @@ export default class StartPage extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    const eagle = this.add.image(horizontalCenter, y, TextureKeys.EagleFly);
-    eagle.setScale(0.25);
-    // eagle.set
-
     y = height * 0.75;
     // add the text with some styling
     const textContinue = this.add

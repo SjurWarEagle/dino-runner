@@ -18,7 +18,6 @@ enum TextureKeys {
   PlayerNormal = "PlayerNormal",
   IslandHill = "IslandHill",
 
-  EagleFly = "eagle-fly",
   Bubble = "bubble",
 
   DinoRun1 = "dino-run-1",
@@ -66,6 +65,14 @@ enum TextureKeys {
   Foreground = "foreground",
   MidGroud1 = "mid-1",
   MidGroud2 = "mid-2",
+
+  MonkeyRun1 = "monkey-run-1",
+  MonkeyRun2 = "monkey-run-2",
+  MonkeyRun3 = "monkey-run-3",
+  MonkeyRun4 = "monkey-run-4",
+  MonkeyRun5 = "monkey-run-5",
+  MonkeyRun6 = "monkey-run-6",
+  MonkeyRun7 = "monkey-run-7",
 }
 
 export default TextureKeys;

@@ -3,22 +3,21 @@ import SceneKeys from "~/consts/SceneKeys";
 import TextureKeys from "~/consts/TextureKeys";
 import PlayerAvatar from "~/game/player-avatar";
 import LiveDisplay from "~/game/LiveDisplay";
-import AnimationKeys from "~/consts/AnimationKeys";
 import { LootBubble } from "~/game/loot-bubble";
 import { ConstOrdering } from "~/helper/const-ordering";
 
 export default class Game extends Phaser.Scene {
-  private CNT_EAGLES = 4;
+  // private CNT_EAGLES = 4;
   private player!: PlayerAvatar;
   private sky!: Phaser.GameObjects.TileSprite;
   private foreground!: Phaser.GameObjects.TileSprite;
   private midground!: Phaser.GameObjects.TileSprite;
   private bubbles: LootBubble[] = [];
+  // private eagles!: Phaser.Physics.Arcade.StaticGroup;
 
   private scoreLabel!: Phaser.GameObjects.Text;
   private score = 0;
   private lifes = 3;
-  private eagles!: Phaser.Physics.Arcade.StaticGroup;
   private liveDisplay!: LiveDisplay;
 
   public init() {
@@ -74,9 +73,9 @@ export default class Game extends Phaser.Scene {
     // this.bubbles = this.physics.add.staticGroup();
     this.spawnBubbles();
 
-    this.eagles = this.physics.add.staticGroup();
-    this.spawnEagles();
-
+    // this.eagles = this.physics.add.staticGroup();
+    // this.spawnEagles();
+    //
     // add new RocketMouse
     this.player = new PlayerAvatar(this, width * 0.25, height - 100);
     this.player.setDepth(ConstOrdering.PLAYER);
@@ -116,13 +115,13 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    this.physics.add.overlap(
-      this.eagles,
-      this.player,
-      this.handleTouchedEagle,
-      undefined,
-      this
-    );
+    // this.physics.add.overlap(
+    //   this.eagles,
+    //   this.player,
+    //   this.handleTouchedEagle,
+    //   undefined,
+    //   this
+    // );
 
     this.scoreLabel = this.add
       .text(10, 10, `Score: ${this.score}`, {
@@ -205,104 +204,104 @@ export default class Game extends Phaser.Scene {
     this.scoreLabel.text = `Score: ${this.score}`;
   }
 
-  private spawnEagles() {
-    this.eagles.children.each((child) => {
-      const eagle = child as Phaser.Physics.Arcade.Sprite;
-      this.eagles.killAndHide(eagle);
-      eagle.body.enable = false;
-    });
-    for (let cnt = 0; cnt < this.CNT_EAGLES; cnt++) {
-      this.spawnEagle();
-    }
-  }
+  // private spawnEagles() {
+  //   this.eagles.children.each((child) => {
+  //     const eagle = child as Phaser.Physics.Arcade.Sprite;
+  //     this.eagles.killAndHide(eagle);
+  //     eagle.body.enable = false;
+  //   });
+  //   for (let cnt = 0; cnt < this.CNT_EAGLES; cnt++) {
+  //     this.spawnEagle();
+  //   }
+  // }
 
-  private spawnEagle() {
-    const width = this.scale.width;
-    const height = this.scale.height;
+  // private spawnEagle() {
+  //   const width = this.scale.width;
+  //   const height = this.scale.height;
+  //
+  //   const scrollX = this.cameras.main.scrollX;
+  //   const rightEdge = scrollX + this.scale.width;
+  //
+  //   const x = rightEdge + Phaser.Math.Between(0, 2 * width);
+  //   const y = Phaser.Math.Between(50, height - 50);
+  //
+  //   const eagle = (
+  //     this.eagles.get(
+  //       x,
+  //       y,
+  //       TextureKeys.EagleFly
+  //     ) as Phaser.Physics.Arcade.Sprite
+  //   )
+  //     .setFlipX(true)
+  //     .setOrigin(0.5, 1)
+  //     .setScale(0.25)
+  //     .play(AnimationKeys.EagleFly);
+  //   // this.isOverlappingExistingEntry(eagle);
+  //
+  //   eagle.setData("touched", false);
+  //
+  //   const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
+  //   // body.setAccelerationY(-200);
+  //   // body.setVelocityX(-20);
+  //   eagle.setVisible(true);
+  //   eagle.setActive(true);
+  //
+  //   // body.setCircle(body.width * 0.015)
+  //   body.enable = true;
+  //
+  //   body.updateFromGameObject();
+  // }
 
-    const scrollX = this.cameras.main.scrollX;
-    const rightEdge = scrollX + this.scale.width;
-
-    const x = rightEdge + Phaser.Math.Between(0, 2 * width);
-    const y = Phaser.Math.Between(50, height - 50);
-
-    const eagle = (
-      this.eagles.get(
-        x,
-        y,
-        TextureKeys.EagleFly
-      ) as Phaser.Physics.Arcade.Sprite
-    )
-      .setFlipX(true)
-      .setOrigin(0.5, 1)
-      .setScale(0.25)
-      .play(AnimationKeys.EagleFly);
-    // this.isOverlappingExistingEntry(eagle);
-
-    eagle.setData("touched", false);
-
-    const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
-    // body.setAccelerationY(-200);
-    // body.setVelocityX(-20);
-    eagle.setVisible(true);
-    eagle.setActive(true);
-
-    // body.setCircle(body.width * 0.015)
-    body.enable = true;
-
-    body.updateFromGameObject();
-  }
-
-  private wrapEagle() {
-    // const width = this.scale.width;
-    // const height = this.scale.height;
-
-    const scrollX = this.cameras.main.scrollX;
-    // const rightEdge = scrollX + this.scale.width
-
-    this.eagles.children.each((child) => {
-      const eagle = child as Phaser.Physics.Arcade.Sprite;
-      const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
-      const width = body.width;
-
-      if (eagle.x + width < scrollX) {
-        this.eagles.killAndHide(eagle);
-        eagle.body.enable = false;
-        this.spawnEagle();
-      }
-
-      // console.log(eagle.x,scrollX);
-
-      // if (eagle.position.x < scrollX) {
-      //     eagle.position.x = scrollX + width;
-      //     eagle.position.y = Phaser.Math.Between(50, height - 50);
-      //     // console.log(Phaser.Math.Between(50, height - 50));
-      // }
-    });
-    // body variable with specific physics body type
-    // const body = this.laserObstacle.body as
-    //     Phaser.Physics.Arcade.StaticBody
-    // // use the body's width
-    // const width = body.width
-    // if (this.laserObstacle.x + width < scrollX) {
-    //     if (!this.laserObstacle.touched) {
-    //         this.missedObstacle();
-    //     }
-    //     this.laserObstacle.x = Phaser.Math.Between(
-    //         rightEdge + width,
-    //         rightEdge + width + 1000
-    //     )
-    //     this.laserObstacle.y = Phaser.Math.Between(0, 300)
-    //     // set the physics body's position
-    //     // add body.offset.x to account for x offset
-    //     body.position.x = this.laserObstacle.x + body.offset.x
-    //     body.position.y = this.laserObstacle.y + body.offset.y;
-    //     this.laserObstacle.touched = false;
-    //
-    //     this.laserObstacle.updateBorders();
-    //     this.laserObstacle.resetTouched();
-    // }
-  }
+  // private wrapEagle() {
+  //   // const width = this.scale.width;
+  //   // const height = this.scale.height;
+  //
+  //   const scrollX = this.cameras.main.scrollX;
+  //   // const rightEdge = scrollX + this.scale.width
+  //
+  //   this.eagles.children.each((child) => {
+  //     const eagle = child as Phaser.Physics.Arcade.Sprite;
+  //     const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
+  //     const width = body.width;
+  //
+  //     if (eagle.x + width < scrollX) {
+  //       this.eagles.killAndHide(eagle);
+  //       eagle.body.enable = false;
+  //       this.spawnEagle();
+  //     }
+  //
+  //     // console.log(eagle.x,scrollX);
+  //
+  //     // if (eagle.position.x < scrollX) {
+  //     //     eagle.position.x = scrollX + width;
+  //     //     eagle.position.y = Phaser.Math.Between(50, height - 50);
+  //     //     // console.log(Phaser.Math.Between(50, height - 50));
+  //     // }
+  //   });
+  //   // body variable with specific physics body type
+  //   // const body = this.laserObstacle.body as
+  //   //     Phaser.Physics.Arcade.StaticBody
+  //   // // use the body's width
+  //   // const width = body.width
+  //   // if (this.laserObstacle.x + width < scrollX) {
+  //   //     if (!this.laserObstacle.touched) {
+  //   //         this.missedObstacle();
+  //   //     }
+  //   //     this.laserObstacle.x = Phaser.Math.Between(
+  //   //         rightEdge + width,
+  //   //         rightEdge + width + 1000
+  //   //     )
+  //   //     this.laserObstacle.y = Phaser.Math.Between(0, 300)
+  //   //     // set the physics body's position
+  //   //     // add body.offset.x to account for x offset
+  //   //     body.position.x = this.laserObstacle.x + body.offset.x
+  //   //     body.position.y = this.laserObstacle.y + body.offset.y;
+  //   //     this.laserObstacle.touched = false;
+  //   //
+  //   //     this.laserObstacle.updateBorders();
+  //   //     this.laserObstacle.resetTouched();
+  //   // }
+  // }
 
   private wrapBubbles() {
     // const width = this.scale.width;
@@ -317,7 +316,7 @@ export default class Game extends Phaser.Scene {
 
       if (body.x + width < scrollX) {
         const x = rightEdge + Phaser.Math.Between(100, 1000);
-        const y = Phaser.Math.Between(100, this.scale.height - 100);
+        const y = Phaser.Math.Between(100, 100+this.scale.height/2);
         body.x = x;
         body.y = y;
 
@@ -335,7 +334,7 @@ export default class Game extends Phaser.Scene {
     this.midground.setTilePosition(this.cameras.main.scrollX * 0.5);
     this.foreground.setTilePosition(this.cameras.main.scrollX);
 
-    this.wrapEagle();
+    // this.wrapEagle();
     this.wrapBubbles();
   }
 
