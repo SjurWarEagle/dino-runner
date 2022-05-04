@@ -7,6 +7,7 @@
 		"build": "parcel build src/index.html --out-dir dist",
 		"lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
+		"prettier": "prettier -w src",
 		"ncu": "ncu -x typescript -u ",
 		"git:add": "git add package.json package-lock.json",
 		"git:commit": "git commit -m \"update dependencies\"",

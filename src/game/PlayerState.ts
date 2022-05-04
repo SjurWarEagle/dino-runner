@@ -1,7 +1,7 @@
 export enum PlayerState {
-    Jumping,
-    Dead,
-    Running,
-    Killed,
-    Falling,
+  Jumping,
+  Dead,
+  Running,
+  Killed,
+  Falling,
 }
