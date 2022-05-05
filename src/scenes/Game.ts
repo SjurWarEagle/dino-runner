@@ -1,10 +1,10 @@
-import Phaser from "phaser";
-import SceneKeys from "~/consts/SceneKeys";
-import TextureKeys from "~/consts/TextureKeys";
-import PlayerAvatar from "~/game/player-avatar";
-import { LootBubble } from "~/game/loot-bubble";
-import { GameConfiguration } from "~/helper/game-configuration";
-import AnimationKeys from "~/consts/AnimationKeys";
+import Phaser from 'phaser';
+import SceneKeys from '~/consts/SceneKeys';
+import TextureKeys from '~/consts/TextureKeys';
+import PlayerAvatar from '~/game/player-avatar';
+import { LootBubble } from '~/game/loot-bubble';
+import { GameConfiguration } from '~/helper/game-configuration';
+import AnimationKeys from '~/consts/AnimationKeys';
 import Group = Phaser.Physics.Arcade.Group;
 
 export default class Game extends Phaser.Scene {
@@ -60,7 +60,6 @@ export default class Game extends Phaser.Scene {
 
     this.foreground.height = heightForeground;
 
-
     this.enemies = this.physics.add.group();
     this.spawnEnemies();
     this.spawnBubbles();
@@ -105,14 +104,14 @@ export default class Game extends Phaser.Scene {
 
     this.scoreLabel = this.add
       .text(10, 10, `Score: ${this.score}`, {
-        fontSize: "24px",
-        color: "#d3d2d2",
+        fontSize: '24px',
+        color: '#d3d2d2',
         shadow: {
           fill: true,
           blur: 2,
           offsetX: 2,
           offsetY: 2,
-          color: "#000000",
+          color: '#000000',
         },
         // padding: {left: 15, right: 15, top: 10, bottom: 10}
       })
@@ -120,16 +119,16 @@ export default class Game extends Phaser.Scene {
 
     this.input.mouse.disableContextMenu();
     this.input.mouse.enabled = true;
-    this.input.on("pointerdown", () => {
+    this.input.on('pointerdown', () => {
       this.player.jump(true);
     });
-    this.input.on("pointerup", () => {
+    this.input.on('pointerup', () => {
       this.player.jump(false);
     });
-    this.input.keyboard.on("keydown-SPACE", () => {
+    this.input.keyboard.on('keydown-SPACE', () => {
       this.player.jump(true);
     });
-    this.input.keyboard.on("keyup-SPACE", () => {
+    this.input.keyboard.on('keyup-SPACE', () => {
       this.player.jump(false);
     });
   }
@@ -141,7 +140,7 @@ export default class Game extends Phaser.Scene {
     //const player = obj1 as Phaser.Physics.Arcade.Sprite;
     const enemy = touchedEnemy as Phaser.Physics.Arcade.Sprite;
 
-    if (enemy.getData("touched")) {
+    if (enemy.getData('touched')) {
       return;
     }
     enemy.body.enable = false;
@@ -202,7 +201,7 @@ export default class Game extends Phaser.Scene {
       .setDepth(GameConfiguration.PLAYER)
       .play(AnimationKeys.MonkeyRun);
 
-    enemy.setData("touched", false);
+    enemy.setData('touched', false);
     this.add.existing(enemy);
 
     const body = enemy.body as Phaser.Physics.Arcade.StaticBody;

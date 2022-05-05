@@ -1,5 +1,5 @@
-import Phaser from "phaser";
-import SceneKeys from "../consts/SceneKeys";
+import Phaser from 'phaser';
+import SceneKeys from '../consts/SceneKeys';
 
 export default class GameOver extends Phaser.Scene {
   constructor() {
@@ -14,10 +14,10 @@ export default class GameOver extends Phaser.Scene {
     const y = height * 0.5;
     // add the text with some styling
     this.add
-      .text(x, y, "Press anything\n to play again", {
-        fontSize: "32px",
-        color: "#FFFFFF",
-        backgroundColor: "#000000",
+      .text(x, y, 'Press anything\n to play again', {
+        fontSize: '32px',
+        color: '#FFFFFF',
+        backgroundColor: '#000000',
         shadow: { fill: true, blur: 0, offsetY: 0 },
         padding: { left: 15, right: 15, top: 10, bottom: 10 },
       })
@@ -28,10 +28,10 @@ export default class GameOver extends Phaser.Scene {
     if (this.game.input.activePointer.leftButtonDown()) {
       this.startGame();
     }
-    this.input.keyboard.once("keyup-SPACE", () => {
+    this.input.keyboard.once('keyup-SPACE', () => {
       this.startGame();
     });
-    this.input.on("pointerup", () => {
+    this.input.on('pointerup', () => {
       this.startGame();
     });
   }

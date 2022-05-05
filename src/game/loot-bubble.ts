@@ -1,6 +1,6 @@
-import Phaser from "phaser";
-import TextureKeys from "~/consts/TextureKeys";
-import AnimationKeys from "~/consts/AnimationKeys";
+import Phaser from 'phaser';
+import TextureKeys from '~/consts/TextureKeys';
+import AnimationKeys from '~/consts/AnimationKeys';
 
 export class LootBubble extends Phaser.GameObjects.Container {
   private bubble!: Phaser.Physics.Arcade.Body | undefined;
@@ -44,13 +44,13 @@ export class LootBubble extends Phaser.GameObjects.Container {
   ): any {
     //FIXME this empty method is only here to prevent removal
     // yes this causes a memory leak but without it causes an exception on scene change.
-    // did not find a better waay to handle this.
+    // did not find a better way to handle this.
   }
 
   destroy(destroyChild?: boolean): any {
     //FIXME this empty method is only here to prevent removal
     // yes this causes a memory leak but without it causes an exception on scene change.
-    // did not find a better waay to handle this.
+    // did not find a better way to handle this.
   }
 
   preUpdate() {

@@ -1,5 +1,5 @@
-import Phaser from "phaser";
-import TextureKeys from "~/consts/TextureKeys";
+import Phaser from 'phaser';
+import TextureKeys from '~/consts/TextureKeys';
 
 export default class LiveDisplay extends Phaser.GameObjects.Container {
   private maxLives = 5;
