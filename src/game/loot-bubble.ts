@@ -58,7 +58,7 @@ export class LootBubble extends Phaser.GameObjects.Container {
   }
 
   initSpeed() {
-    const gravity = -200;
+    const gravity = -1 * (this.scene.physics.config.gravity?.y || 0);
     const deltaY = Phaser.Math.Between(-5, 5);
     const deltaX = Phaser.Math.Between(-2, 2);
     this.bubble!.setAccelerationY(gravity + deltaY);

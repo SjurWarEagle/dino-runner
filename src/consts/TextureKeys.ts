@@ -8,6 +8,7 @@ enum TextureKeys {
   LaserMiddle = "laser-middle",
 
   Coin = "coin",
+  Cookie = "cookie",
 
   CloudsSmall = "clouds-small",
   Clouds = "Clouds",

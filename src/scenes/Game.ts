@@ -8,7 +8,7 @@ import AnimationKeys from "~/consts/AnimationKeys";
 import Group = Phaser.Physics.Arcade.Group;
 
 export default class Game extends Phaser.Scene {
-  private CNT_ENEMIES = 2;
+  private CNT_ENEMIES = 1;
   private player!: PlayerAvatar;
   private sky!: Phaser.GameObjects.TileSprite;
   private foreground!: Phaser.GameObjects.TileSprite;
@@ -18,12 +18,9 @@ export default class Game extends Phaser.Scene {
 
   private scoreLabel!: Phaser.GameObjects.Text;
   private score = 0;
-  // private lifes = 3;
-  // private liveDisplay!: LiveDisplay;
 
   public init() {
     this.score = 0;
-    // this.lifes = 3;
   }
 
   constructor() {
@@ -63,13 +60,13 @@ export default class Game extends Phaser.Scene {
 
     this.foreground.height = heightForeground;
 
-    this.spawnBubbles();
 
     this.enemies = this.physics.add.group();
     this.spawnEnemies();
-    //
-    // add new RocketMouse
+    this.spawnBubbles();
+
     this.player = new PlayerAvatar(this, width * 0.25, height - 100);
+    this.player.setDimensions(height, width);
     this.player.setDepth(ConstOrdering.PLAYER);
     this.add.existing(this.player);
 

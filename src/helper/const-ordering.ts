@@ -5,7 +5,7 @@ export class ConstOrdering {
   public static FAR_BACKGROUND = -30;
 
   public static getJumpForwardSpeed() {
-    return 100;
+    return 200;
   }
 
   public static getRunForwardSpeed() {
