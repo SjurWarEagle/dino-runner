@@ -3,7 +3,7 @@ import SceneKeys from "~/consts/SceneKeys";
 import TextureKeys from "~/consts/TextureKeys";
 import PlayerAvatar from "~/game/player-avatar";
 import { LootBubble } from "~/game/loot-bubble";
-import { ConstOrdering } from "~/helper/const-ordering";
+import { GameConfiguration } from "~/helper/game-configuration";
 import AnimationKeys from "~/consts/AnimationKeys";
 import Group = Phaser.Physics.Arcade.Group;
 
@@ -39,12 +39,12 @@ export default class Game extends Phaser.Scene {
       .tileSprite(0, 0, width, height, TextureKeys.Sky1)
       .setOrigin(0, 0)
       .setScrollFactor(0, 0)
-      .setDepth(ConstOrdering.FAR_BACKGROUND);
+      .setDepth(GameConfiguration.FAR_BACKGROUND);
     this.midground = this.add
       .tileSprite(0, 0, width, height, TextureKeys.MidGroud1)
       .setOrigin(0, 0)
       .setScrollFactor(0, 0)
-      .setDepth(ConstOrdering.BACKGROUND);
+      .setDepth(GameConfiguration.BACKGROUND);
     this.foreground = this.add
       .tileSprite(
         0,
@@ -56,7 +56,7 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0, 0)
       .setScrollFactor(0)
       .setScale(1, 2)
-      .setDepth(ConstOrdering.FOREGROUND);
+      .setDepth(GameConfiguration.FOREGROUND);
 
     this.foreground.height = heightForeground;
 
@@ -67,13 +67,13 @@ export default class Game extends Phaser.Scene {
 
     this.player = new PlayerAvatar(this, width * 0.25, height - 100);
     this.player.setDimensions(height, width);
-    this.player.setDepth(ConstOrdering.PLAYER);
+    this.player.setDepth(GameConfiguration.PLAYER);
     this.add.existing(this.player);
 
     // error happens here
     const body = this.player.body as Phaser.Physics.Arcade.Body;
     body.setCollideWorldBounds(true);
-    ConstOrdering.getRunForwardSpeed();
+    GameConfiguration.getRunForwardSpeed();
 
     const marginWorld = height * (1 / 100);
     this.physics.world.setBounds(
@@ -199,7 +199,7 @@ export default class Game extends Phaser.Scene {
       .setFlipX(true)
       .setOrigin(1, 1)
       .setOffset(0, 10)
-      .setDepth(ConstOrdering.PLAYER)
+      .setDepth(GameConfiguration.PLAYER)
       .play(AnimationKeys.MonkeyRun);
 
     enemy.setData("touched", false);

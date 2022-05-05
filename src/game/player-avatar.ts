@@ -3,7 +3,7 @@ import TextureKeys from "../consts/TextureKeys";
 import AnimationKeys from "../consts/AnimationKeys";
 import SceneKeys from "~/consts/SceneKeys";
 import {PlayerState} from "~/game/PlayerState";
-import {ConstOrdering} from "~/helper/const-ordering";
+import {GameConfiguration} from "~/helper/game-configuration";
 
 export default class PlayerAvatar extends Phaser.GameObjects.Container {
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -85,7 +85,7 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
                 this.body.setVelocityY(this.body.velocity.y + 20);
                 if (this.body.blocked.down) {
                     this.player.play(AnimationKeys.DinoRun, true);
-                    this.body.setVelocityX(ConstOrdering.getRunForwardSpeed());
+                    this.body.setVelocityX(GameConfiguration.getRunForwardSpeed());
                 }
                 break;
             case PlayerState.Running:
@@ -126,7 +126,7 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
                 return;
             }
             this.playerBody.setVelocityY(-600);
-            this.playerBody.setVelocityX(ConstOrdering.getJumpForwardSpeed());
+            this.playerBody.setVelocityX(GameConfiguration.getJumpForwardSpeed());
             // this.playerBody.setAccelerationY(200);
             this.mouseState = PlayerState.Jumping;
             this.player.play(AnimationKeys.DinoJump, true);

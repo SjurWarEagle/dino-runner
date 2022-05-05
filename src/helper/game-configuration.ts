@@ -1,4 +1,4 @@
-export class ConstOrdering {
+export class GameConfiguration {
   public static FOREGROUND = -10;
   public static PLAYER = -15;
   public static BACKGROUND = -20;
