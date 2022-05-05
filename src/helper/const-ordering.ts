@@ -3,4 +3,12 @@ export class ConstOrdering {
   public static PLAYER = -15;
   public static BACKGROUND = -20;
   public static FAR_BACKGROUND = -30;
+
+  public static getJumpForwardSpeed() {
+    return 100;
+  }
+
+  public static getRunForwardSpeed() {
+    return 200;
+  }
 }

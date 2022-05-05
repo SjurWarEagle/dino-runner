@@ -47,6 +47,12 @@ export class LootBubble extends Phaser.GameObjects.Container {
     // did not find a better waay to handle this.
   }
 
+  destroy(destroyChild?: boolean): any {
+    //FIXME this empty method is only here to prevent removal
+    // yes this causes a memory leak but without it causes an exception on scene change.
+    // did not find a better waay to handle this.
+  }
+
   preUpdate() {
     this.body = this.body as Phaser.Physics.Arcade.Body;
   }

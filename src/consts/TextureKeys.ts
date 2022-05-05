@@ -1,8 +1,6 @@
 enum TextureKeys {
   Background = "background",
 
-  RocketMouse = "rocket-mouse",
-
   LiveAvailable = "live-available",
   LiveUsed = "live-used",
 

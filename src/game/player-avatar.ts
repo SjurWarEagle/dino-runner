@@ -3,6 +3,7 @@ import TextureKeys from "../consts/TextureKeys";
 import AnimationKeys from "../consts/AnimationKeys";
 import SceneKeys from "~/consts/SceneKeys";
 import { PlayerState } from "~/game/PlayerState";
+import { ConstOrdering } from "~/helper/const-ordering";
 
 export default class PlayerAvatar extends Phaser.GameObjects.Container {
   // private flames: Phaser.GameObjects.Sprite;
@@ -39,12 +40,12 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
     this.cursors = scene.input.keyboard.createCursorKeys();
 
     this.playerBody.setSize(
-      this.player.width * imageScale * 0.65,
-      this.player.height * imageScale
+      this.player.width * imageScale * 0.5,
+      this.player.height * imageScale * 0.9
     );
     this.playerBody.setOffset(
-      (-this.player.width * imageScale) / 4,
-      this.player.height * -imageScale
+      (-this.player.width * imageScale) / 4 + 50,
+      this.player.height * -imageScale + 10
     );
 
     this.overlay = scene.add
@@ -73,6 +74,7 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
       case PlayerState.Falling:
         if (this.body.blocked.down) {
           this.player.play(AnimationKeys.DinoRun, true);
+          this.body.setVelocityX(ConstOrdering.getRunForwardSpeed());
         }
         break;
       case PlayerState.Running:
@@ -89,12 +91,12 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
       case PlayerState.Killed: {
         // // this.gameOverFlames.setVisible(true);
         // // reduce velocity to 99% of current value
-        // this.playerBody.velocity.x *= 0.99;
+        this.playerBody.velocity.x *= 0.99;
         // // once less than 5 we can say stop
-        // if (this.playerBody.velocity.x <= 5) {
-        //     this.mouseState = PlayerState.Dead;
-        //     this.player.play(AnimationKeys.DinoDead, true);
-        // }
+        if (this.playerBody.velocity.x <= 5) {
+          this.mouseState = PlayerState.Dead;
+          this.player.play(AnimationKeys.DinoDead, true);
+        }
         break;
       }
       case PlayerState.Dead: {
@@ -112,14 +114,20 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
       if (!this.body.blocked.down) {
         return;
       }
-      this.playerBody.setVelocityY(-400);
+      this.playerBody.setVelocityY(-600);
+      this.playerBody.setVelocityX(ConstOrdering.getJumpForwardSpeed());
+      this.playerBody.setAccelerationY(200);
       this.mouseState = PlayerState.Jumping;
       this.player.play(AnimationKeys.DinoJump, true);
     } else {
       // this.playerBody.setAccelerationY(0);
-      // this.player.play(AnimationKeys.RocketMouseFall, true);
     }
   }
+  //
+  // remove(
+  //   child: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[],
+  //   destroyChild?: boolean
+  // ): any {}
 
   hit() {
     // this.playerBody.set
@@ -135,17 +143,14 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
   }
 
   kill() {
-    // don't do anything if not in RUNNING state
     if (
-      this.mouseState == PlayerState.Killed ||
-      this.mouseState == PlayerState.Dead
+      this.mouseState === PlayerState.Killed ||
+      this.mouseState === PlayerState.Dead
     ) {
       return;
     }
-    // set state to KILLED
     this.mouseState = PlayerState.Killed;
-    // this.player.play(AnimationKeys.RocketMouseDead)
-    console.log("killed called");
+    // console.log("killed called");
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setAccelerationY(0);
     body.setVelocity(400, 0);

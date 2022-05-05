@@ -5,24 +5,28 @@ import PlayerAvatar from "~/game/player-avatar";
 import LiveDisplay from "~/game/LiveDisplay";
 import { LootBubble } from "~/game/loot-bubble";
 import { ConstOrdering } from "~/helper/const-ordering";
+import AnimationKeys from "~/consts/AnimationKeys";
+import Sprite = Phaser.Physics.Arcade.Sprite;
+import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
+import Group = Phaser.Physics.Arcade.Group;
 
 export default class Game extends Phaser.Scene {
-  // private CNT_EAGLES = 4;
+  private CNT_ENEMIES = 2;
   private player!: PlayerAvatar;
   private sky!: Phaser.GameObjects.TileSprite;
   private foreground!: Phaser.GameObjects.TileSprite;
   private midground!: Phaser.GameObjects.TileSprite;
   private bubbles: LootBubble[] = [];
-  // private eagles!: Phaser.Physics.Arcade.StaticGroup;
+  private enemies!: Group;
 
   private scoreLabel!: Phaser.GameObjects.Text;
   private score = 0;
-  private lifes = 3;
-  private liveDisplay!: LiveDisplay;
+  // private lifes = 3;
+  // private liveDisplay!: LiveDisplay;
 
   public init() {
     this.score = 0;
-    this.lifes = 3;
+    // this.lifes = 3;
   }
 
   constructor() {
@@ -61,20 +65,11 @@ export default class Game extends Phaser.Scene {
       .setDepth(ConstOrdering.FOREGROUND);
 
     this.foreground.height = heightForeground;
-    // this.foreground.z = -5;
-    // this.sky.z = 20;
-    // this.midground.z = -10;
-    // this.foreground.scaleX = 2;
 
-    this.liveDisplay = new LiveDisplay(this);
-
-    this.add.existing(this.liveDisplay);
-
-    // this.bubbles = this.physics.add.staticGroup();
     this.spawnBubbles();
 
-    // this.eagles = this.physics.add.staticGroup();
-    // this.spawnEagles();
+    this.enemies = this.physics.add.group();
+    this.spawnEnemies();
     //
     // add new RocketMouse
     this.player = new PlayerAvatar(this, width * 0.25, height - 100);
@@ -84,7 +79,7 @@ export default class Game extends Phaser.Scene {
     // error happens here
     const body = this.player.body as Phaser.Physics.Arcade.Body;
     body.setCollideWorldBounds(true);
-    body.setVelocityX(200);
+    ConstOrdering.getRunForwardSpeed();
 
     const marginWorld = height * (1 / 100);
     this.physics.world.setBounds(
@@ -98,15 +93,6 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.followOffset.set(-width * 0.35, 0);
     this.cameras.main.setBounds(100, 0, Number.MAX_SAFE_INTEGER, height);
 
-    // this.physics.add.overlap(
-    //     this.laserObstacle.top,
-    //     this.player,
-    //     this.handleTouchedGateBorder,
-    //     undefined,
-    //     this
-    // );
-    //
-
     this.physics.add.overlap(
       this.bubbles,
       this.player,
@@ -115,13 +101,13 @@ export default class Game extends Phaser.Scene {
       this
     );
 
-    // this.physics.add.overlap(
-    //   this.eagles,
-    //   this.player,
-    //   this.handleTouchedEagle,
-    //   undefined,
-    //   this
-    // );
+    this.physics.add.overlap(
+      this.enemies,
+      this.player,
+      this.handleTouchedEnemy,
+      undefined,
+      this
+    );
 
     this.scoreLabel = this.add
       .text(10, 10, `Score: ${this.score}`, {
@@ -137,15 +123,6 @@ export default class Game extends Phaser.Scene {
         // padding: {left: 15, right: 15, top: 10, bottom: 10}
       })
       .setScrollFactor(0);
-
-    // this.liveLabel = this.add.text(10, 50, `Lives: ${this.lifes}`, {
-    //     fontSize: '12px',
-    //     color: '#bbbbbb',
-    //     backgroundColor: '#2646c6',
-    //     shadow: {fill: true, blur: 0, offsetY: 0},
-    //     padding: {left: 15, right: 15, top: 10, bottom: 10}
-    // }).setScrollFactor(0)
-    this.liveDisplay.updateLifes(this.lifes);
 
     this.input.mouse.disableContextMenu();
     this.input.mouse.enabled = true;
@@ -163,25 +140,21 @@ export default class Game extends Phaser.Scene {
     });
   }
 
-  private handleTouchedEagle(
+  private handleTouchedEnemy(
     obj1: Phaser.GameObjects.GameObject,
-    obj2: Phaser.GameObjects.GameObject
+    touchedEnemy: Phaser.GameObjects.GameObject
   ) {
     //const player = obj1 as Phaser.Physics.Arcade.Sprite;
-    const eagle = obj2 as Phaser.Physics.Arcade.Sprite;
+    const enemy = touchedEnemy as Phaser.Physics.Arcade.Sprite;
 
-    if (eagle.getData("touched")) {
+    if (enemy.getData("touched")) {
       return;
     }
-    eagle.body.enable = false;
+    enemy.body.enable = false;
+    enemy.visible = false;
 
-    this.lifes--;
     this.player.hit();
-    this.liveDisplay.updateLifes(this.lifes);
-
-    if (this.lifes <= 0) {
-      this.player.kill();
-    }
+    this.player.kill();
   }
 
   // noinspection JSUnusedLocalSymbols
@@ -191,9 +164,6 @@ export default class Game extends Phaser.Scene {
   ) {
     // eslint-disable-next-line
     const bubble = obj1 as Phaser.Physics.Arcade.Sprite;
-    // const player = obj2 as Phaser.Physics.Arcade.Sprite;
-    //console.log(player);
-    //console.log(bubble);
     //FIXME this.coins.killAndHide(coin);
 
     // and turn off the physics body
@@ -204,104 +174,70 @@ export default class Game extends Phaser.Scene {
     this.scoreLabel.text = `Score: ${this.score}`;
   }
 
-  // private spawnEagles() {
-  //   this.eagles.children.each((child) => {
-  //     const eagle = child as Phaser.Physics.Arcade.Sprite;
-  //     this.eagles.killAndHide(eagle);
-  //     eagle.body.enable = false;
-  //   });
-  //   for (let cnt = 0; cnt < this.CNT_EAGLES; cnt++) {
-  //     this.spawnEagle();
-  //   }
-  // }
+  private spawnEnemies() {
+    this.enemies.children.each((child) => {
+      const enemy = child as Phaser.Physics.Arcade.Sprite;
+      this.enemies.killAndHide(enemy);
+      enemy.body.enable = false;
+    });
+    for (let cnt = 0; cnt < this.CNT_ENEMIES; cnt++) {
+      this.spawnEnemy();
+    }
+  }
 
-  // private spawnEagle() {
-  //   const width = this.scale.width;
-  //   const height = this.scale.height;
-  //
-  //   const scrollX = this.cameras.main.scrollX;
-  //   const rightEdge = scrollX + this.scale.width;
-  //
-  //   const x = rightEdge + Phaser.Math.Between(0, 2 * width);
-  //   const y = Phaser.Math.Between(50, height - 50);
-  //
-  //   const eagle = (
-  //     this.eagles.get(
-  //       x,
-  //       y,
-  //       TextureKeys.EagleFly
-  //     ) as Phaser.Physics.Arcade.Sprite
-  //   )
-  //     .setFlipX(true)
-  //     .setOrigin(0.5, 1)
-  //     .setScale(0.25)
-  //     .play(AnimationKeys.EagleFly);
-  //   // this.isOverlappingExistingEntry(eagle);
-  //
-  //   eagle.setData("touched", false);
-  //
-  //   const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
-  //   // body.setAccelerationY(-200);
-  //   // body.setVelocityX(-20);
-  //   eagle.setVisible(true);
-  //   eagle.setActive(true);
-  //
-  //   // body.setCircle(body.width * 0.015)
-  //   body.enable = true;
-  //
-  //   body.updateFromGameObject();
-  // }
+  private spawnEnemy() {
+    const width = this.scale.width;
+    const height = this.scale.height;
 
-  // private wrapEagle() {
-  //   // const width = this.scale.width;
-  //   // const height = this.scale.height;
-  //
-  //   const scrollX = this.cameras.main.scrollX;
-  //   // const rightEdge = scrollX + this.scale.width
-  //
-  //   this.eagles.children.each((child) => {
-  //     const eagle = child as Phaser.Physics.Arcade.Sprite;
-  //     const body = eagle.body as Phaser.Physics.Arcade.StaticBody;
-  //     const width = body.width;
-  //
-  //     if (eagle.x + width < scrollX) {
-  //       this.eagles.killAndHide(eagle);
-  //       eagle.body.enable = false;
-  //       this.spawnEagle();
-  //     }
-  //
-  //     // console.log(eagle.x,scrollX);
-  //
-  //     // if (eagle.position.x < scrollX) {
-  //     //     eagle.position.x = scrollX + width;
-  //     //     eagle.position.y = Phaser.Math.Between(50, height - 50);
-  //     //     // console.log(Phaser.Math.Between(50, height - 50));
-  //     // }
-  //   });
-  //   // body variable with specific physics body type
-  //   // const body = this.laserObstacle.body as
-  //   //     Phaser.Physics.Arcade.StaticBody
-  //   // // use the body's width
-  //   // const width = body.width
-  //   // if (this.laserObstacle.x + width < scrollX) {
-  //   //     if (!this.laserObstacle.touched) {
-  //   //         this.missedObstacle();
-  //   //     }
-  //   //     this.laserObstacle.x = Phaser.Math.Between(
-  //   //         rightEdge + width,
-  //   //         rightEdge + width + 1000
-  //   //     )
-  //   //     this.laserObstacle.y = Phaser.Math.Between(0, 300)
-  //   //     // set the physics body's position
-  //   //     // add body.offset.x to account for x offset
-  //   //     body.position.x = this.laserObstacle.x + body.offset.x
-  //   //     body.position.y = this.laserObstacle.y + body.offset.y;
-  //   //     this.laserObstacle.touched = false;
-  //   //
-  //   //     this.laserObstacle.updateBorders();
-  //   //     this.laserObstacle.resetTouched();
-  //   // }
-  // }
+    const scrollX = this.cameras.main.scrollX;
+    const rightEdge = scrollX + this.scale.width;
+
+    const x = rightEdge + Phaser.Math.Between(0, 2 * width);
+    const y = height - 10;
+
+    const enemy = (
+      this.enemies.get(
+        x,
+        y,
+        TextureKeys.MonkeyRun1
+      ) as Phaser.Physics.Arcade.Sprite
+    )
+      .setFlipX(true)
+      .setOrigin(1, 1)
+      .setOffset(0, 10)
+      .setDepth(ConstOrdering.PLAYER)
+      .play(AnimationKeys.MonkeyRun);
+
+    enemy.setData("touched", false);
+    this.add.existing(enemy);
+
+    const body = enemy.body as Phaser.Physics.Arcade.StaticBody;
+    enemy.setCollideWorldBounds(true);
+    enemy.setVelocityX(-200);
+    enemy.setVisible(true);
+    enemy.setActive(true);
+
+    // body.setCircle(body.width * 0.015)
+    body.enable = true;
+
+    body.updateFromGameObject();
+  }
+
+  private wrapEnemies() {
+    const scrollX = this.cameras.main.scrollX;
+
+    this.enemies.children.each((child) => {
+      const enemy = child as Phaser.Physics.Arcade.Sprite;
+      const body = enemy.body as Phaser.Physics.Arcade.StaticBody;
+      const width = body.width;
+
+      if (enemy.x + width < scrollX) {
+        this.enemies.killAndHide(enemy);
+        enemy.body.enable = false;
+        this.spawnEnemy();
+      }
+    });
+  }
 
   private wrapBubbles() {
     // const width = this.scale.width;
@@ -316,7 +252,7 @@ export default class Game extends Phaser.Scene {
 
       if (body.x + width < scrollX) {
         const x = rightEdge + Phaser.Math.Between(100, 1000);
-        const y = Phaser.Math.Between(100, 100+this.scale.height/2);
+        const y = Phaser.Math.Between(100, 100 + this.scale.height / 2);
         body.x = x;
         body.y = y;
 
@@ -334,7 +270,7 @@ export default class Game extends Phaser.Scene {
     this.midground.setTilePosition(this.cameras.main.scrollX * 0.5);
     this.foreground.setTilePosition(this.cameras.main.scrollX);
 
-    // this.wrapEagle();
+    this.wrapEnemies();
     this.wrapBubbles();
   }
 
