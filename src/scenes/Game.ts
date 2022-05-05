@@ -2,12 +2,9 @@ import Phaser from "phaser";
 import SceneKeys from "~/consts/SceneKeys";
 import TextureKeys from "~/consts/TextureKeys";
 import PlayerAvatar from "~/game/player-avatar";
-import LiveDisplay from "~/game/LiveDisplay";
 import { LootBubble } from "~/game/loot-bubble";
 import { ConstOrdering } from "~/helper/const-ordering";
 import AnimationKeys from "~/consts/AnimationKeys";
-import Sprite = Phaser.Physics.Arcade.Sprite;
-import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
 import Group = Phaser.Physics.Arcade.Group;
 
 export default class Game extends Phaser.Scene {

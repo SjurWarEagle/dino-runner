@@ -119,15 +119,8 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
       this.playerBody.setAccelerationY(200);
       this.mouseState = PlayerState.Jumping;
       this.player.play(AnimationKeys.DinoJump, true);
-    } else {
-      // this.playerBody.setAccelerationY(0);
     }
   }
-  //
-  // remove(
-  //   child: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[],
-  //   destroyChild?: boolean
-  // ): any {}
 
   hit() {
     // this.playerBody.set
