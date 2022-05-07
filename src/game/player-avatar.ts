@@ -40,7 +40,7 @@ export default class PlayerAvatar extends Phaser.GameObjects.Container {
     this.cursors = scene.input.keyboard.createCursorKeys();
 
     this.playerBody.setSize(
-      this.player.width * imageScale * 0.5,
+      this.player.width * imageScale * 0.4,
       this.player.height * imageScale * 0.9
     );
     this.playerBody.setOffset(

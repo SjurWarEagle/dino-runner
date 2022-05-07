@@ -153,9 +153,8 @@ export default class Game extends Phaser.Scene {
   // noinspection JSUnusedLocalSymbols
   private handleCollectCoin(
     obj1: Phaser.GameObjects.GameObject,
-    obj2: Phaser.GameObjects.GameObject
+    // obj2: Phaser.GameObjects.GameObject
   ) {
-    // eslint-disable-next-line
     const bubble = obj1 as Phaser.Physics.Arcade.Sprite;
     //FIXME this.coins.killAndHide(coin);
 
@@ -198,6 +197,7 @@ export default class Game extends Phaser.Scene {
       .setFlipX(true)
       .setOrigin(1, 1)
       .setOffset(0, 10)
+      .setBodySize(70, 160)
       .setDepth(GameConfiguration.PLAYER)
       .play(AnimationKeys.MonkeyRun);
 
@@ -206,7 +206,7 @@ export default class Game extends Phaser.Scene {
 
     const body = enemy.body as Phaser.Physics.Arcade.StaticBody;
     enemy.setCollideWorldBounds(true);
-    enemy.setVelocityX(-200);
+    enemy.setVelocityX(-150);
     enemy.setVisible(true);
     enemy.setActive(true);
 
