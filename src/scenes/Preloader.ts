@@ -9,7 +9,7 @@ export default class Preloader extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(TextureKeys.Coin, 'house/object_coin.png');
+    // this.load.image(TextureKeys.Coin, 'house/object_coin.png');
     this.load.image(TextureKeys.Cookie, 'house/cookie.png');
 
     this.load.atlas(

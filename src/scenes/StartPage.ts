@@ -18,7 +18,7 @@ export default class StartPage extends Phaser.Scene {
 
     y = height * 0.25;
 
-    this.add.image(horizontalCenter, y, TextureKeys.Coin);
+    this.add.image(horizontalCenter, y, TextureKeys.Cookie);
     this.add
       .text(horizontalCenter - 150, y, 'Points:', {
         fontSize: '32px',

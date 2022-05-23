@@ -103,7 +103,7 @@ export default class Game extends Phaser.Scene {
     );
 
     this.scoreLabel = this.add
-      .text(10, 10, `Score: ${this.score}`, {
+      .text(10, 10, `Cookies: ${this.score}`, {
         fontSize: '24px',
         color: '#d3d2d2',
         shadow: {
